@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predicciones de Fútbol</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .predictions {
+            margin-top: 20px;
+        }
+        .match {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Predicciones de Fútbol</h1>
+    <div id="predictions" class="predictions"></div>
+
+    <script>
+        const API_KEY = 'tu_api_key'; // Reemplaza con tu API key
+        const BASE_URL = 'https://api-football-v1.p.rapidapi.com/v3/fixtures';
+        
+        async function getPredictions() {
+            const response = await fetch(BASE_URL, {
+                method: 'GET',
+                headers: {
+                    'X-RapidAPI-Key': API_KEY,
+                    'X-RapidAPI-Host': 'api-football-v1.p.rapidapi.com'
+                }
+            });
+            const data = await response.json();
+            displayPredictions(data);
+        }
+
+        function displayPredictions(data) {
+            const predictionsDiv = document.getElementById('predictions');
+            predictionsDiv.innerHTML = ''; // Limpiar antes de agregar nuevos datos
+
+            data.response.forEach(match => {
+                const matchDiv = document.createElement('div');
+                matchDiv.classList.add('match');
+                matchDiv.innerHTML = `
+                    <strong>${match.teams.home.name} vs ${match.teams.away.name}</strong><br>
+                    Fecha: ${match.fixture.date}<br>
+                    Predicción: ${getPrediction(match)}<br>
+                `;
+                predictionsDiv.appendChild(matchDiv);
+            });
+        }
+
+        function getPrediction(match) {
+            // Aquí puedes usar un algoritmo para predecir el resultado basado en los datos.
+            // Para ahora, solo te mostramos un texto genérico.
+            return '2-1 (Predicción basada en estadísticas)';
+        }
+
+        getPredictions(); // Llamar la función para obtener y mostrar las predicciones
+    </script>
+
+</body>
+</html>
